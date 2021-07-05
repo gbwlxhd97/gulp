@@ -15,10 +15,12 @@
     "@babel/register": "^7.14.5",
     "gulp": "^4.0.2",
     "gulp-pug": "^5.0.0",
-    "gulp-webserver": "^0.9.1"
+    "gulp-webserver": "^0.9.1",
+    "sass": "^1.35.1"
   },
   "dependencies": {
     "del": "^6.0.0",
-    "gulp-image": "^6.2.1"
+    "gulp-image": "^6.2.1",
+    "gulp-sass": "^5.0.0"
   }
 }
