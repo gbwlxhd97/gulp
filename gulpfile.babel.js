@@ -4,6 +4,9 @@ import del from  "del";
 import ws from "gulp-webserver";
 import image from "gulp-image";
 //import sass from "gulp-sass";
+import bro from "gulp-bro";
+import babelify from "babelify";
+
 
 //sass.compiler = require("sass");
 
@@ -22,6 +25,11 @@ const routes = {
     //     src: "src/scss/style.css",
     //     dest: "build/css"
     // }
+    js: {
+        watch: "src/js/**/*.js",
+        src: "src/js/main.js",
+        dest: "build/js"
+      }
 };
 
 
@@ -37,6 +45,7 @@ const webserver = () => gulp.src("build").pipe(ws({livereload: true, open: true}
 const watch = () => { //-w , 왓치모드 컴파일 바로바로해주는기능
     gulp.watch(routes.pug.watch, pug);
     //gulp.watch(routes.scss.watch, styles);
+    gulp.watch(routes.js.watch, js);
 }
 
 const img = () => gulp
@@ -50,10 +59,23 @@ const img = () => gulp
 //     .pipe(sass().on("error", sass.logError))
 //     .pipe(gulp.dest(routes.scss.dest));   
 
+const js = () =>
+  gulp
+    .src(routes.js.src)
+    .pipe(
+      bro({
+        transform: [
+          babelify.configure({ presets: ["@babel/preset-env"] }),
+          ["uglifyify", { global: true }]
+        ]
+      })
+    )
+    .pipe(gulp.dest(routes.js.dest));
+
 const prepare = gulp.series([clean,img]);
 
-const assets = gulp.series([pug,/*styles*/]);
+const assets = gulp.series([pug,/*styles*/ js]);
 
-const postDev = gulp.series([webserver,watch]); //동시에 두가지 Task를 처리하는 방법 그냥 저렇게 일렬로 쓰고 , 로 구분해주기
+const live = gulp.series([webserver,watch]); //동시에 두가지 Task를 처리하는 방법 그냥 저렇게 일렬로 쓰고 , 로 구분해주기
 
-export const dev =  gulp.series([prepare,assets,postDev]); 
+export const dev =  gulp.series([prepare,assets,live]); 
