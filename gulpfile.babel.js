@@ -6,7 +6,7 @@ import image from "gulp-image";
 //import sass from "gulp-sass";
 import bro from "gulp-bro";
 import babelify from "babelify";
-
+import ghPages from 'gulp-gh-pages';
 
 //sass.compiler = require("sass");
 
@@ -38,7 +38,7 @@ const pug = () => gulp
 .pipe(gpug())
 .pipe(gulp.dest(routes.pug.dest));
 
-const clean = () => del(["build"]); // 빌드실수를 했을때 삭제하고 다시 만들어주는 모듈
+const clean = () => del(["build",".publish"]); // 빌드실수를 했을때 삭제하고 다시 만들어주는 모듈
 
 const webserver = () => gulp.src("build").pipe(ws({livereload: true, open: true}));
 
@@ -72,10 +72,14 @@ const js = () =>
     )
     .pipe(gulp.dest(routes.js.dest));
 
+
+const ghdeploy = () => gulp.src("build/**/*").pipe(ghPages());    
 const prepare = gulp.series([clean,img]);
 
 const assets = gulp.series([pug,/*styles*/ js]);
 
 const live = gulp.series([webserver,watch]); //동시에 두가지 Task를 처리하는 방법 그냥 저렇게 일렬로 쓰고 , 로 구분해주기
 
-export const dev =  gulp.series([prepare,assets,live]); 
+export const build = gulp.series([prepare, assets]);
+export const dev =  gulp.series([build,live]); 
+export const deploy = gulp.series([build,ghdeploy,clean])

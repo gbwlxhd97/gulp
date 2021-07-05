@@ -11,3 +11,12 @@
 ##### watch모드 추가
 
 ##### scss에서는 node-sass가 필요한데 m1 mac에서는 호환이되지않음. gulp sass는 주석처리.
+
+#### 스크립트 정리
+
+1. yarn build : build폴더 생성 그 안에 데이터 삽입
+2. yarn dev : 파일들을 build폴더로 컴파일 해줌 (babel,img,pug)
+3. yarn deploy : build파일들을 github-pages에 베포해주고 dev환경에서의 build폴더 삭제
+
+베포 : gbwlxhd97.github.io/gulp
+node-sass 이슈로 css 적용을 하지 못함.. 추후 업데이트예정
